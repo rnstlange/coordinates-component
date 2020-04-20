@@ -1,3 +1,5 @@
+import pkg from './package.json'
+
 import svelte from 'rollup-plugin-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 import resolve from '@rollup/plugin-node-resolve'
@@ -5,16 +7,28 @@ import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 
+const name = pkg.name
+	.replace(/^(@\S+\/)?(svelte-)?(\S+)/, '$3')
+	.replace(/^\w/, m => m.toUpperCase())
+	.replace(/-\w/g, m => m[1].toUpperCase())
+
 const production = !process.env.ROLLUP_WATCH
 
 export default {
-	input: 'src/main.js',
-	output: {
-		sourcemap: true,
-		format: 'esm',
-		name: 'app',
-		file: 'public/bundle.js'
-	},
+	input: 'src/index.js',
+	output: [
+		{
+			sourcemap: true,
+			format: 'esm',
+			file: pkg.module
+		},
+		{
+			sourcemap: true,
+			format: 'iife',
+			name,
+			file: pkg.main
+		}
+	],
 	plugins: [
 		svelte({
 			dev: !production,
@@ -32,7 +46,7 @@ export default {
 
 		!production && serve(),
 
-		!production && livereload('public'),
+		!production && livereload('build'),
 
 		production && terser()
 	],

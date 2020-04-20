@@ -1,17 +1,24 @@
 {
-	"name": "svelte-app",
+	"name": "coordinates-component",
 	"version": "1.0.0",
+	"module": "build/bundle.mjs",
+	"main": "build/bundle.js",
+	"svelte": "src/index.js",
 	"scripts": {
 		"build": "rollup -c",
 		"dev": "rollup -c -w",
-		"start": "sirv public"
+		"start": "sirv build",
+		"prepublishOnly": "npm run build"
 	},
 	"devDependencies": {
 		"@fullhuman/postcss-purgecss": "^2.1.2",
 		"@rollup/plugin-commonjs": "11.0.2",
 		"@rollup/plugin-node-resolve": "^7.0.0",
+		"autoprefixer": "^9.7.6",
 		"postcss": "^7.0.27",
+		"postcss-import": "^12.0.1",
 		"postcss-load-config": "^2.1.0",
+		"precss": "^4.0.0",
 		"prettier": "^2.0.4",
 		"prettier-plugin-svelte": "^0.7.0",
 		"rollup": "^1.20.0",
