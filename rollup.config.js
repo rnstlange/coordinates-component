@@ -1,4 +1,5 @@
 import svelte from 'rollup-plugin-svelte'
+import sveltePreprocess from 'svelte-preprocess'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
@@ -10,16 +11,18 @@ export default {
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
-		format: 'iife',
+		format: 'esm',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		file: 'public/bundle.js'
 	},
 	plugins: [
 		svelte({
 			dev: !production,
-			css: css => {
-				css.write('public/build/bundle.css')
-			}
+			format: 'esm',
+			immutable: true,
+			hydratable: true,
+			preprocess: sveltePreprocess({ postcss: true }),
+			css: true
 		}),
 		resolve({
 			browser: true,
