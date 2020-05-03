@@ -1,4 +1,4 @@
-const round = (n, p) => Math.round(n * pow(10, p)) / pow(10, p)
+const round = (n, p) => Math.round(n * Math.pow(10, p)) / Math.pow(10, p)
 
 export const fromDMSToDD = ([n, h]) => {
 	const f = ([d, m, s]) => d + m / 60 + s / 3600
@@ -49,3 +49,6 @@ export const DMSToString = ([[dn, mn, sn], [de, me, se]], p = 2) => `${dn}°${mn
 export const DDToString = ([dn, de], p = 6) => `${round(dn, p)}, ${round(de, p)}`
 
 export const toString = (c, p) => (testC(c) === 'dms' ? DMSToString(c, p) : DDToString(c, p))
+
+export const formatToString = (c, f, p) =>
+	testC(c) == f ? toString(c, p) : f == 'dms' ? toString(fromDDToDMS(c, p), p) : toString(fromDMSToDD(c, p), p)
