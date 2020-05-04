@@ -1,5 +1,5 @@
 <script>
-	import {createEventDispatcher} from 'svelte'
+	import { createEventDispatcher } from 'svelte'
 
 	const dispatch = createEventDispatcher()
 
@@ -7,23 +7,20 @@
 	export let right
 	export let value = false
 
-	$: dispatch('change', value ? right.value : left.value)
-
+	const handleChange = () => dispatch('change', value ? right.value : left.value)
 </script>
 
 <label class="toggle-container">
 	<span class="text">{left.text}</span>
 
 	<div class="toggle {value ? 'active' : ''}">
-		<input class="checkbox" type="checkbox" bind:checked={value} on:change={() => dispatch('change', value ? right.value : left.value)}>
-		<span class="line"></span>
-		<span class="dot"></span>
+		<input class="checkbox" type="checkbox" bind:checked={value} on:change={handleChange} />
+		<span class="line" />
+		<span class="dot" />
 	</div>
-
 
 	<span class="text">{right.text}</span>
 </label>
-
 
 <style lang="postcss">
 	.toggle-container {
@@ -33,7 +30,7 @@
 	.toggle {
 		@apply relative mx-2;
 	}
-	.toggle.active .dot{
+	.toggle.active .dot {
 		transform: translateX(100%);
 	}
 
@@ -47,8 +44,8 @@
 
 	.dot {
 		@apply absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0;
-		top: -.25rem;
-		left: -.25rem;
-		transition: all .3s ease-in-out;
+		top: -0.25rem;
+		left: -0.25rem;
+		transition: all 0.3s ease-in-out;
 	}
 </style>

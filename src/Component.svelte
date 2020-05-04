@@ -1,43 +1,146 @@
 <script>
-	import { parseString, formatToString } from './format'
+	import { createEventDispatcher } from 'svelte'
+	import { testString, parseString, formatToString } from './format'
 	import GlobalStyle from './GlobalStyle.svelte'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
 	export let format = 'dms'
 	export let multiple = false
-	export let buffer_metric = 'm'
-	export let buffer = false // Buffer value
 	export let coordinate = false // Current point
 	export let coordinates = [] // Array of points
-	export let shape = 'polygon'
+	export let multitool = false
+
+	const dispatch = createEventDispatcher()
+
+	const bufferMetrics = [
+		{ text: 'м', value: 1 },
+		{ text: 'км', value: 1000 }
+	]
+
+	let bufferMetric = 1
 
 	let coordinateInput = ''
+	let buffer = 0
+	let shape = 'polygon'
+
+	const onChange = () => {
+		if (coordinates.length > 0)
+			dispatch('change', {
+				buffer,
+				coordinates,
+				...(multitool && coordinates.length > 1 ? { shape: shape } : {})
+			})
+	}
+
+	const handleFormatChange = ({ detail: v }) => {
+		format = v
+	}
+
+	const handleAddCoordinate = () => {
+		if (testString(coordinateInput)) {
+			if (!multiple) coordinates = [parseString(coordinateInput, 'dms')]
+			else coordinates = [parseString(coordinateInput, 'dms'), ...coordinates]
+			coordinateInput = ''
+			onChange()
+		}
+	}
+
+	const handleDelInputCoordinate = () => {
+		coordinateInput = ''
+	}
+
+	const handleDelCoordinate = idx => () => {
+		coordinates = coordinates.filter((_, i) => i !== idx)
+		onChange()
+	}
+
+	const handleShapeChange = ({ detail: v }) => {
+		shape = v
+		onChange()
+	}
 </script>
 
 <GlobalStyle />
 
-<div>
+<div class="component">
 	<!-- dms / dd -->
-	<div>
+	<div class="row">
 		<div>Координаты</div>
-		<Toggle left={{text: 'DMS', value: 'dms'}} right={{text: 'DD', value: 'dd'}} on:change={({detail: v}) => format = v} />
+		<Toggle left={{ text: 'DMS', value: 'dms' }} right={{ text: 'DD', value: 'dd' }} on:change={handleFormatChange} />
 	</div>
 	<!-- point coordinates -->
-	<div>
-		<PointInput bind:value={coordinateInput} on:add={() => {coordinates = [parseString(coordinateInput, 'dms'), ...coordinates]; coordinateInput = ''}} on:del={() => coordinateInput = ''}/>
+	<div class="multiplerows">
+		<div>
+			<PointInput bind:value={coordinateInput} on:add={handleAddCoordinate} on:del={handleDelInputCoordinate} />
+		</div>
 		{#each coordinates as coordinate, i}
-			<PointInput value={formatToString(coordinate, format)} disabled={true} on:del={() => coordinates = coordinates.filter((_, idx) => idx !== i)}/>
+			<div>
+				<PointInput value={formatToString(coordinate, format)} disabled={true} on:del={handleDelCoordinate(i)} />
+			</div>
 		{/each}
 	</div>
 	<!-- cursor coordinates -->
-	<div></div>
+	{#if coordinate}
+		<div class="row">
+			<div>{formatToString(coordinate, format)}</div>
+		</div>
+	{/if}
 	<!-- buferization -->
-	<div></div>
-	<!-- line / polygon -->
-	<div>
-		<Toggle left={{text: 'Линия', value: 'line'}} right={{text: 'Полигон', value: 'polygon'}} value={shape == 'polygon'} on:change={({detail: v}) => shape = v} />
+	<div class="row">
+		<div>Буферизация</div>
+		<input bind:value={buffer} on:change={onChange} type="number" min="0" step="any" style="flex: 1 1 auto; width: 0" />
+		<select bind:value={bufferMetric} on:change={onChange}>
+			{#each bufferMetrics as metric}
+				<option value={metric.value}>{metric.text}</option>
+			{/each}
+		</select>
 	</div>
+	<!-- line / polygon -->
+	{#if coordinates.length > 1 && multitool}
+		<div class="row">
+			<Toggle
+				left={{ text: 'Линия', value: 'line' }}
+				right={{ text: 'Полигон', value: 'polygon' }}
+				value={shape == 'polygon'}
+				on:change={handleShapeChange}
+			/>
+		</div>
+	{/if}
 </div>
 
-<style>
+<style lang="postcss">
+	.component {
+		@apply p-4 border border-black rounded-lg;
+		width: 300px;
+
+		& > * {
+			@apply mb-4;
+
+			&:last-child {
+				@apply mb-0;
+			}
+		}
+	}
+
+	.row {
+		@apply flex flex-row justify-between;
+
+		& > * {
+			@apply mr-4;
+			&:last-child {
+				@apply mr-0;
+			}
+		}
+	}
+
+	.multiplerows {
+		@apply flex flex-col;
+
+		& > * {
+			@apply mb-1;
+			&:last-child {
+				@apply mb-0;
+			}
+		}
+	}
 </style>

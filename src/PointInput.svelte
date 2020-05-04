@@ -9,12 +9,34 @@
 	const handleDelClick = () => dispatch('del')
 </script>
 
-<div>
-	<input type="text" class="rounded-full px-2" bind:value={value} disabled={disabled}>
+<div class="component">
+	<input type="text" class="input" bind:value {disabled} />
 	{#if value}
-		<button class="px-1" on:click={handleDelClick}>🗑️</button>
+		<button on:click={handleDelClick}>🗑</button>
 	{/if}
 	{#if !disabled}
-		<button class="px-1" on:click={handleAddClick}>➕</button>
+		<button on:click={handleAddClick}>➕</button>
 	{/if}
 </div>
+
+<style lang="postcss">
+	.component {
+		@apply flex flex-row;
+
+		& > * {
+			@apply mr-1;
+
+			&:last-child {
+				@apply mr-0;
+			}
+		}
+	}
+
+	.input {
+		@apply rounded-full px-2 flex-auto w-0;
+	}
+
+	button {
+		@apply px-1;
+	}
+</style>
