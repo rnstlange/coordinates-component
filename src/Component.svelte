@@ -23,10 +23,10 @@
 	let buffer = 0
 	let shape = 'polygon'
 
-	const onChange = () => {
-		if (coordinates.length > 0)
+	const onChange = (force = false) => {
+		if (force || coordinates.length > 0)
 			dispatch('change', {
-				buffer,
+				buffer: buffer * bufferMetric,
 				coordinates,
 				...(multitool && coordinates.length > 1 ? { shape: shape } : {})
 			})
@@ -51,7 +51,7 @@
 
 	const handleDelCoordinate = idx => () => {
 		coordinates = coordinates.filter((_, i) => i !== idx)
-		onChange()
+		onChange(true)
 	}
 
 	const handleShapeChange = ({ detail: v }) => {
