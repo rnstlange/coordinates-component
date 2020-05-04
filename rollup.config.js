@@ -35,6 +35,7 @@ export default {
 			format: 'esm',
 			immutable: true,
 			hydratable: true,
+			accessors: true,
 			preprocess: sveltePreprocess({ postcss: true }),
 			css: true
 		}),

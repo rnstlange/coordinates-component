@@ -7,14 +7,14 @@
 	"scripts": {
 		"build": "rollup -c",
 		"dev": "rollup -c -w",
-		"start": "sirv build",
-		"install": "npm run build"
+		"start": "sirv build"
 	},
 	"devDependencies": {
 		"@fullhuman/postcss-purgecss": "^2.1.2",
 		"@rollup/plugin-commonjs": "11.0.2",
 		"@rollup/plugin-node-resolve": "^7.0.0",
 		"autoprefixer": "^9.7.6",
+		"husky": "^4.2.5",
 		"postcss": "^7.0.27",
 		"postcss-import": "^12.0.1",
 		"postcss-load-config": "^2.1.0",
@@ -31,5 +31,10 @@
 	},
 	"dependencies": {
 		"sirv-cli": "^0.4.4"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run build"
+		}
 	}
 }
