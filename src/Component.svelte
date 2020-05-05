@@ -38,8 +38,8 @@
 
 	const handleAddCoordinate = () => {
 		if (testString(coordinateInput)) {
-			if (!multiple) coordinates = [parseString(coordinateInput, 'dms')]
-			else coordinates = [parseString(coordinateInput, 'dms'), ...coordinates]
+			if (!multiple) coordinates = [parseString(coordinateInput, 'dd')]
+			else coordinates = [parseString(coordinateInput, 'dd'), ...coordinates]
 			coordinateInput = ''
 			onChange()
 		}
