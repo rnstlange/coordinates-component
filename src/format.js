@@ -1,4 +1,11 @@
 const round = (n, p) => Math.round(n * Math.pow(10, p)) / Math.pow(10, p)
+const normalize = (x, num) => x.toString().padStart(num, 0)
+const normalizeRounded = (x, num, p) => {
+	const xr = round(x, p)
+	const n = Math.floor(xr)
+	const ost = Math.floor((xr - n) * Math.pow(10, p))
+	return `${normalize(n, num)}${ost != 0 ? `.${ost}` : ''}`
+}
 
 export const fromDMSToDD = ([n, h]) => {
 	const f = ([d, m, s]) => d + m / 60 + s / 3600
@@ -44,7 +51,11 @@ export const parseString = (string, format) => {
 	}
 }
 
-export const DMSToString = ([[dn, mn, sn], [de, me, se]], p = 2) => `${dn}°${mn}'${round(sn, p)}", ${de}°${me}'${round(se, p)}"`
+export const DMSToString = ([[dn, mn, sn], [de, me, se]], p = 2) => {
+	const n = x => normalize(x, 2)
+	const nr = x => normalizeRounded(x, 2, p)
+	return `${n(dn)}°${n(mn)}'${nr(sn)}", ${n(de)}°${n(me)}'${nr(se)}"`
+}
 
 export const DDToString = ([dn, de], p = 6) => `${round(dn, p)}, ${round(de, p)}`
 
