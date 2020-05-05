@@ -1,6 +1,6 @@
 {
 	"name": "@rnstlange/coordinates-component",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"module": "build/bundle.mjs",
 	"main": "build/bundle.js",
 	"svelte": "src/index.js",
@@ -8,7 +8,7 @@
 		"build": "rollup -c",
 		"dev": "rollup -c -w",
 		"start": "sirv build",
-		"prepublish": "npm run build"
+		"prepublishOnly": "npm run build"
 	},
 	"devDependencies": {
 		"@fullhuman/postcss-purgecss": "^2.1.2",
