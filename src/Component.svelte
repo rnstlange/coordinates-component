@@ -9,6 +9,7 @@
 	export let coordinate = false // Current point
 	export let coordinates = [] // Array of points
 	export let multitool = false
+	export let bufferization = false
 
 	const dispatch = createEventDispatcher()
 
@@ -26,7 +27,7 @@
 	const onChange = (force = false) => {
 		if (force || coordinates.length > 0)
 			dispatch('change', {
-				buffer: buffer * bufferMetric,
+				...(bufferization ? {buffer: buffer * bufferMetric} : {}),
 				coordinates,
 				...(multitool && coordinates.length > 1 ? { shape: shape } : {})
 			})
@@ -86,15 +87,17 @@
 		</div>
 	{/if}
 	<!-- buferization -->
-	<div class="row">
-		<div>Буферизация</div>
-		<input bind:value={buffer} on:change={onChange} type="number" min="0" step="any" style="flex: 1 1 auto; width: 0" />
-		<select bind:value={bufferMetric} on:change={onChange}>
-			{#each bufferMetrics as metric}
-				<option value={metric.value}>{metric.text}</option>
-			{/each}
-		</select>
-	</div>
+	{#if bufferization}
+		<div class="row">
+			<div>Буферизация</div>
+			<input bind:value={buffer} on:change={onChange} type="number" min="0" step="any" style="flex: 1 1 auto; width: 0" />
+			<select bind:value={bufferMetric} on:change={onChange}>
+				{#each bufferMetrics as metric}
+					<option value={metric.value}>{metric.text}</option>
+				{/each}
+			</select>
+		</div>
+	{/if}
 	<!-- line / polygon -->
 	{#if coordinates.length > 1 && multitool}
 		<div class="row">
