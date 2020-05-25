@@ -45,9 +45,7 @@ export const parseString = (string, format) => {
 
 	if (DDR.test(string)) {
 		const [_, dn, ddn, de, dde] = string.match(DDR)
-		console.log(dn, ddn, de, dde)
 		const c = [p(dn) + pOst(ddn), p(de) + pOst(dde)]
-		console.log(c)
 		if (format === 'dms') return fromDDToDMS(c)
 		else return c
 	} else if (DMSR.test(string)) {
