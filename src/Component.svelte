@@ -1,15 +1,17 @@
 <script>
 	import { createEventDispatcher } from 'svelte'
-	import { testString, parseString, formatToString } from './format'
+	import { testString, parseString, formatToString, fromEPSG3857ToMSK64, fromWGS84ToMSK64, fromMSK64ToWGS84 } from './format'
 	import GlobalStyle from './GlobalStyle.svelte'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
+	import Radio from './Radio.svelte'
 	export let format = 'dms'
 	export let multiple = false
 	export let coordinate = false // Current point
 	export let coordinates = [] // Array of points
 	export let multitool = false
 	export let bufferization = false
+	export let projection = 'WGS84'
 
 	const dispatch = createEventDispatcher()
 
@@ -23,6 +25,19 @@
 	let coordinateInput = ''
 	let buffer = 0
 	let shape = 'polygon'
+
+	const projectionList = [{label: 'WGS84', value: 'WGS84'}, {label: 'MSK', value: 'MSK'}]
+
+	$: changeProjection = (coordinate, decode = true) => {
+		if (decode) {
+			if (projection == 'WGS84') return coordinate
+			if (projection == 'MSK') return fromWGS84ToMSK64(coordinate)
+		} else {
+			if (projection == 'WGS84') return coordinate
+			if (projection == 'MSK') return fromMSK64ToWGS84(coordinate)
+		}
+		return coordinate
+	}
 
 	const onChange = (force = false) => {
 		if (force || coordinates.length > 0)
@@ -39,8 +54,10 @@
 
 	const handleAddCoordinate = () => {
 		if (testString(coordinateInput)) {
-			if (!multiple) coordinates = [parseString(coordinateInput, 'dd')]
-			else coordinates = [parseString(coordinateInput, 'dd'), ...coordinates]
+			const coordinate = changeProjection(parseString(coordinateInput, 'dd'), false)
+
+			if (!multiple) coordinates = [coordinate]
+			else coordinates = [coordinate, ...coordinates]
 			coordinateInput = ''
 			onChange()
 		}
@@ -59,6 +76,12 @@
 		shape = v
 		onChange()
 	}
+
+	const handleProjectionChange = ({detail: v}) => {
+		projection = v
+		onChange()
+	}
+
 </script>
 
 <GlobalStyle />
@@ -66,8 +89,12 @@
 <div class="component">
 	<!-- dms / dd -->
 	<div class="row">
-		<div>Координаты</div>
+		<div>Координаты:</div>
 		<Toggle left={{ text: 'DMS', value: 'dms' }} right={{ text: 'DD', value: 'dd' }} on:change={handleFormatChange} />
+	</div>
+	<div class="row">
+		<div>Проекция:</div>
+		<Radio list={projectionList} value={projection} on:change={handleProjectionChange} />
 	</div>
 	<!-- point coordinates -->
 	<div class="multiplerows">
@@ -76,14 +103,14 @@
 		</div>
 		{#each coordinates as coordinate, i}
 			<div>
-				<PointInput value={formatToString(coordinate, format)} disabled={true} on:del={handleDelCoordinate(i)} />
+				<PointInput value={formatToString(changeProjection(coordinate), format)} disabled={true} on:del={handleDelCoordinate(i)} />
 			</div>
 		{/each}
 	</div>
 	<!-- cursor coordinates -->
 	{#if coordinate}
 		<div class="row">
-			<div>{formatToString(coordinate, format)}</div>
+			<div>{formatToString(changeProjection(coordinate), format)}</div>
 		</div>
 	{/if}
 	<!-- buferization -->
