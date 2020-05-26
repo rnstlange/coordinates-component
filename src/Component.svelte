@@ -1,6 +1,6 @@
 <script>
 	import { createEventDispatcher } from 'svelte'
-	import { testString, parseString, formatToString, fromEPSG3857ToMSK64, fromWGS84ToMSK64, fromMSK64ToWGS84 } from './format'
+	import { testString, parseString, formatToString, fromEPSG3857ToMSK64, fromMSK64ToEPSG3857, fromEPSG3857ToWGS84, fromWGS84ToEPSG3857 } from './format'
 	import GlobalStyle from './GlobalStyle.svelte'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
@@ -30,11 +30,11 @@
 
 	$: changeProjection = (coordinate, decode = true) => {
 		if (decode) {
-			if (projection == 'WGS84') return coordinate
-			if (projection == 'MSK') return fromWGS84ToMSK64(coordinate)
+			if (projection == 'WGS84') return fromEPSG3857ToWGS84(coordinate)
+			if (projection == 'MSK') return fromEPSG3857ToMSK64(coordinate)
 		} else {
-			if (projection == 'WGS84') return coordinate
-			if (projection == 'MSK') return fromMSK64ToWGS84(coordinate)
+			if (projection == 'WGS84') return fromWGS84ToEPSG3857(coordinate)
+			if (projection == 'MSK') return fromMSK64ToEPSG3857(coordinate)
 		}
 		return coordinate
 	}
