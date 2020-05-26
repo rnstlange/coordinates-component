@@ -1,6 +1,6 @@
 {
 	"name": "@rnstlange/coordinates-component",
-	"version": "1.1.4",
+	"version": "1.1.5",
 	"module": "build/bundle.mjs",
 	"main": "build/bundle.js",
 	"svelte": "src/index.js",
@@ -31,6 +31,7 @@
 		"rollup-plugin-terser": "^5.1.2",
 		"sirv-cli": "^0.4.6",
 		"svelte": "^3.0.0",
+		"svelte-icons": "^2.1.0",
 		"svelte-preprocess": "^3.7.1",
 		"tailwindcss": "^1.2.0"
 	},

@@ -1,23 +1,16 @@
 <script>
 	import { createEventDispatcher } from 'svelte'
 	import FaPlus from 'svelte-icons/fa/FaPlus.svelte'
-	import FaTrash from 'svelte-icons/fa/FaTrash.svelte'
 	export let value = ''
 	export let disabled = false
 
 	const dispatch = createEventDispatcher()
 
 	const handleAddClick = () => dispatch('add')
-	const handleDelClick = () => dispatch('del')
 </script>
 
 <div class="component">
-	<input type="text" class="input" bind:value {disabled} />
-	{#if value}
-		<button on:click={handleDelClick}>
-			<FaTrash />
-		</button>
-	{/if}
+	<textarea class="input" bind:value {disabled} />
 	{#if !disabled}
 		<button on:click={handleAddClick}>
 			<FaPlus />
@@ -27,7 +20,7 @@
 
 <style lang="postcss">
 	.component {
-		@apply flex flex-row items-center w-full;
+		@apply flex flex-row items-end w-full;
 
 		& > * {
 			@apply mr-1;
@@ -39,7 +32,7 @@
 	}
 
 	.input {
-		@apply rounded-full px-2 flex-auto w-0;
+		@apply rounded-md px-2 flex-auto h-10 w-full min-h-full;
 	}
 
 	button {

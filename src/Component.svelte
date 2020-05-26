@@ -12,7 +12,7 @@
 	import GlobalStyle from './GlobalStyle.svelte'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
-	// import Radio from './Radio.svelte'
+	import Textarea from './Textarea.svelte'
 	export let format = 'dms'
 	export let multiple = false
 	export let coordinate = false // Current point
@@ -31,6 +31,7 @@
 	let bufferMetric = 1
 
 	let coordinateInput = ''
+	let coordinateTextarea = ''
 	let buffer = 0
 	let shape = 'polygon'
 
@@ -79,6 +80,20 @@
 		coordinateInput = ''
 	}
 
+	const handleAddMultipleCoordinate = () => {
+		coordinateTextarea.split('\n').map(el => {
+			if (testString(el)) {
+				coordinates = [changeProjection(parseString(el, 'dd'), false), ...coordinates]
+			}
+		})
+
+		coordinateTextarea = ''
+		onChange()
+	}
+	const handleDeleteMultipleCoordinate = () => {
+		coordinateTextarea = ''
+	}
+
 	const handleDelCoordinate = idx => () => {
 		coordinates = coordinates.filter((_, i) => i !== idx)
 		onChange(true)
@@ -116,15 +131,26 @@
 			value={shape == 'WGS84'}
 			on:change={handleProjectionChange}
 		/>
-		<!-- <Radio list={projectionList} value={projection} on:change={handleProjectionChange} /> -->
 	</div>
+
+	<!-- points input -->
+	{#if multiple}
+		<div class="row">
+			<Textarea bind:value={coordinateTextarea} on:add={handleAddMultipleCoordinate} on:del={handleDeleteMultipleCoordinate} />
+		</div>
+	{/if}
+
+	<!-- point input -->
+
+	{#if !multiple}
+		<div class="row">
+			<PointInput bind:value={coordinateInput} on:add={handleAddCoordinate} on:del={handleDelInputCoordinate} />
+		</div>
+	{/if}
 
 	<!-- point coordinates -->
 
 	<div class="multiplerows">
-		<div>
-			<PointInput bind:value={coordinateInput} on:add={handleAddCoordinate} on:del={handleDelInputCoordinate} />
-		</div>
 		{#each coordinates as coordinate, i}
 			<div>
 				<PointInput value={formatToString(changeProjection(coordinate), format)} disabled={true} on:del={handleDelCoordinate(i)} />
