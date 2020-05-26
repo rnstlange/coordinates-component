@@ -1,0 +1,6 @@
+*
+!/package.json
+!/package.lock
+!/README.md
+!/build/bundle.js
+!/build/bundle.mjs
