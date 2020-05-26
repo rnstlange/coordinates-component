@@ -12,7 +12,7 @@
 	import GlobalStyle from './GlobalStyle.svelte'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
-	import Radio from './Radio.svelte'
+	// import Radio from './Radio.svelte'
 	export let format = 'dms'
 	export let multiple = false
 	export let coordinate = false // Current point
@@ -98,16 +98,29 @@
 <GlobalStyle />
 
 <div class="component">
+
 	<!-- dms / dd -->
+
 	<div class="row">
 		<div>Координаты:</div>
 		<Toggle left={{ text: 'DMS', value: 'dms' }} right={{ text: 'DD', value: 'dd' }} on:change={handleFormatChange} />
 	</div>
+
+	<!-- projection -->
+
 	<div class="row">
 		<div>Проекция:</div>
-		<Radio list={projectionList} value={projection} on:change={handleProjectionChange} />
+		<Toggle
+			left={{ text: 'WGS84', value: 'WGS84' }}
+			right={{ text: 'МСК-64', value: 'MSK' }}
+			value={shape == 'WGS84'}
+			on:change={handleProjectionChange}
+		/>
+		<!-- <Radio list={projectionList} value={projection} on:change={handleProjectionChange} /> -->
 	</div>
+
 	<!-- point coordinates -->
+
 	<div class="multiplerows">
 		<div>
 			<PointInput bind:value={coordinateInput} on:add={handleAddCoordinate} on:del={handleDelInputCoordinate} />
@@ -118,13 +131,17 @@
 			</div>
 		{/each}
 	</div>
+
 	<!-- cursor coordinates -->
+
 	{#if coordinate}
 		<div class="row">
 			<div>{formatToString(changeProjection(coordinate), format)}</div>
 		</div>
 	{/if}
+
 	<!-- buferization -->
+
 	{#if bufferization}
 		<div class="row">
 			<div>Буферизация</div>
@@ -136,7 +153,9 @@
 			</select>
 		</div>
 	{/if}
+
 	<!-- line / polygon -->
+
 	{#if coordinates.length > 1 && multitool}
 		<div class="row">
 			<Toggle
