@@ -9,6 +9,7 @@ proj.defs(
 // '+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=95942.17 +y_0=-6552810 +ellps=krass +towgs84=23.92,-141.27,-80.9,-0,0.35,0.82,-0.12 +units=m +no_defs'
 // '+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=95942.17 +y_0=-6552810 +ellps=krass'
 
+const swap = ([a, b]) => [b, a]
 const round = (n, p) => Math.round(n * Math.pow(10, p)) / Math.pow(10, p)
 const normalize = (x, num) => x.toString().padStart(num, 0)
 const normalizeRounded = (x, num, p) => {
@@ -67,18 +68,16 @@ export const DMSToString = ([[dn, mn, sn], [de, me, se]], p = 2) => {
 
 export const DDToString = ([dn, de], p = 6) => `${round(dn, p)}, ${round(de, p)}`
 
-export const toString = (c, p) => (testC(c) === 'dms' ? DMSToString(c, p) : DDToString(c, p))
+export const toString = (c, p) => (testC(c) === 'dms' ? DMSToString(swap(c), p) : DDToString(swap(c), p))
 
 export const formatToString = (c, f, p) =>
 	testC(c) == f ? toString(c, p) : f == 'dms' ? toString(fromDDToDMS(c, p), p) : toString(fromDMSToDD(c, p), p)
 
-const swap = ([a, b]) => [b, a]
-
-export const fromMSK64ToWGS84 = coordinates => swap(proj('MB:6331964', 'WGS84', coordinates))
-export const fromMSK64ToEPSG3857 = coordinates => swap(proj('MB:6331964', 'EPSG:3857', coordinates))
-
-export const fromWGS84ToEPSG3857 = coordinates => proj('WGS84', 'EPSG:3857', coordinates)
-export const fromWGS84ToMSK64 = coordinates => proj('WGS84', 'MB:6331964', swap(coordinates))
-
 export const fromEPSG3857ToWGS84 = coordinates => proj('EPSG:3857', 'WGS84', coordinates)
-export const fromEPSG3857ToMSK64 = coordinates => proj('EPSG:3857', 'MB:6331964', swap(coordinates))
+export const fromEPSG3857ToMSK64 = coordinates => proj('EPSG:3857', 'MB:6331964', coordinates)
+
+export const fromWGS84ToEPSG3857 = coordinates => proj('WGS84', 'EPSG:3857', swap(coordinates))
+export const fromMSK64ToEPSG3857 = coordinates => proj('MB:6331964', 'EPSG:3857', coordinates)
+
+export const fromMSK64ToWGS84 = coordinates => proj('MB:6331964', 'WGS84', coordinates)
+export const fromWGS84ToMSK64 = coordinates => proj('WGS84', 'MB:6331964', coordinates)

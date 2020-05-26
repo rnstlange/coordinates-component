@@ -13,7 +13,7 @@
 <div class="component">
 	{#each list as el}
 		<label>
-			<input type="radio" value={el.value} bind:group={value} on:change={e => handleChange(e.target.value)}>
+			<input type="radio" value={el.value} bind:group={value} on:change={e => handleChange(e.target.value)} />
 			{el.label}
 		</label>
 	{/each}

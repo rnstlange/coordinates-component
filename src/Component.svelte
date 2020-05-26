@@ -1,6 +1,14 @@
 <script>
 	import { createEventDispatcher } from 'svelte'
-	import { testString, parseString, formatToString, fromEPSG3857ToMSK64, fromMSK64ToEPSG3857, fromEPSG3857ToWGS84, fromWGS84ToEPSG3857 } from './format'
+	import {
+		testString,
+		parseString,
+		formatToString,
+		fromEPSG3857ToMSK64,
+		fromMSK64ToEPSG3857,
+		fromEPSG3857ToWGS84,
+		fromWGS84ToEPSG3857
+	} from './format'
 	import GlobalStyle from './GlobalStyle.svelte'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
@@ -26,7 +34,10 @@
 	let buffer = 0
 	let shape = 'polygon'
 
-	const projectionList = [{label: 'WGS84', value: 'WGS84'}, {label: 'MSK', value: 'MSK'}]
+	const projectionList = [
+		{ label: 'WGS84', value: 'WGS84' },
+		{ label: 'MSK', value: 'MSK' }
+	]
 
 	$: changeProjection = (coordinate, decode = true) => {
 		if (decode) {
@@ -42,7 +53,7 @@
 	const onChange = (force = false) => {
 		if (force || coordinates.length > 0)
 			dispatch('change', {
-				...(bufferization ? {buffer: buffer * bufferMetric} : {}),
+				...(bufferization ? { buffer: buffer * bufferMetric } : {}),
 				coordinates,
 				...(multitool && coordinates.length > 1 ? { shape: shape } : {})
 			})
@@ -55,6 +66,7 @@
 	const handleAddCoordinate = () => {
 		if (testString(coordinateInput)) {
 			const coordinate = changeProjection(parseString(coordinateInput, 'dd'), false)
+			console.log(coordinate)
 
 			if (!multiple) coordinates = [coordinate]
 			else coordinates = [coordinate, ...coordinates]
@@ -77,11 +89,10 @@
 		onChange()
 	}
 
-	const handleProjectionChange = ({detail: v}) => {
+	const handleProjectionChange = ({ detail: v }) => {
 		projection = v
 		onChange()
 	}
-
 </script>
 
 <GlobalStyle />
