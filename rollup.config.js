@@ -38,7 +38,9 @@ export default {
 			hydratable: true,
 			accessors: true,
 			preprocess: sveltePreprocess({ postcss: true }),
-			css: true
+			css(css) {
+				css.write('build/style.css')
+			}
 		}),
 		resolve({
 			browser: true,
