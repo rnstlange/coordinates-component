@@ -199,7 +199,7 @@
 	@import 'tailwindcss/utilities';
 	.component {
 		@apply p-4 border border-black rounded-lg !important;
-		width: 350px !important;
+		width: 22rem !important;
 
 		& > * {
 			@apply mb-4 !important;
