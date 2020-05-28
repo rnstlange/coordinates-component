@@ -27,22 +27,22 @@
 
 <style lang="postcss">
 	.component {
-		@apply flex flex-row items-center w-full;
+		@apply flex flex-row items-center w-full !important;
 
 		& > * {
-			@apply mr-1;
+			@apply mr-1 !important;
 
 			&:last-child {
-				@apply mr-0;
+				@apply mr-0 !important;
 			}
 		}
 	}
 
 	.input {
-		@apply border border-solid border-gray-500 rounded-full px-2 flex-auto w-0;
+		@apply border border-solid border-gray-500 rounded-full px-2 flex-auto w-0 !important;
 	}
 
 	.button {
-		@apply border border-solid border-gray-500 rounded-md px-1 h-6 w-6 flex;
+		@apply border border-solid border-gray-500 rounded-md px-1 h-6 w-6 flex !important;
 	}
 </style>

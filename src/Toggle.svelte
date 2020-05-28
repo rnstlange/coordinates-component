@@ -24,26 +24,26 @@
 
 <style lang="postcss">
 	.toggle-container {
-		@apply flex items-center cursor-pointer;
+		@apply flex items-center cursor-pointer !important;
 	}
 
 	.toggle {
-		@apply relative mx-2;
+		@apply relative mx-2 !important;
 	}
 	.toggle.active .dot {
 		transform: translateX(100%) !important;
 	}
 
 	.checkbox {
-		@apply border border-solid border-gray-500 rounded-md hidden;
+		@apply border border-solid border-gray-500 rounded-md hidden !important;
 	}
 
 	.line {
-		@apply block w-10 h-4 bg-gray-400 rounded-full shadow-inner;
+		@apply block w-10 h-4 bg-gray-400 rounded-full shadow-inner !important;
 	}
 
 	.dot {
-		@apply absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0;
+		@apply absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0 !important;
 		top: -0.25rem !important;
 		left: -0.25rem !important;
 		transition: all 0.3s ease-in-out !important;

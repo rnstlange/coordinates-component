@@ -198,36 +198,36 @@
 	@import 'tailwindcss/components';
 	@import 'tailwindcss/utilities';
 	.component {
-		@apply p-4 border border-black rounded-lg;
+		@apply p-4 border border-black rounded-lg !important;
 		width: 350px !important;
 
 		& > * {
-			@apply mb-4;
+			@apply mb-4 !important;
 
 			&:last-child {
-				@apply mb-0;
+				@apply mb-0 !important;
 			}
 		}
 	}
 
 	.row {
-		@apply flex flex-row justify-between;
+		@apply flex flex-row justify-between !important;
 
 		& > * {
-			@apply mr-4;
+			@apply mr-4 !important;
 			&:last-child {
-				@apply mr-0;
+				@apply mr-0 !important;
 			}
 		}
 	}
 
 	.multiplerows {
-		@apply flex flex-col;
+		@apply flex flex-col !important;
 
 		& > * {
-			@apply mb-1;
+			@apply mb-1 !important;
 			&:last-child {
-				@apply mb-0;
+				@apply mb-0 !important;
 			}
 		}
 	}
