@@ -12,7 +12,7 @@
 <div class="component">
 	<textarea class="input" bind:value {disabled} />
 	{#if !disabled}
-		<button on:click={handleAddClick}>
+		<button class="button" on:click={handleAddClick}>
 			<FaPlus />
 		</button>
 	{/if}
@@ -32,10 +32,10 @@
 	}
 
 	.input {
-		@apply rounded-md px-2 flex-auto h-10 w-full min-h-full !important;
+		@apply border border-solid border-gray-500 rounded-md px-2 py-1 flex-auto min-h-12 w-full !important;
 	}
 
-	button {
-		@apply px-1 h-6 w-6 !important;
+	.button {
+		@apply border border-solid border-gray-500 rounded-md px-1 h-6 w-6 flex !important;
 	}
 </style>

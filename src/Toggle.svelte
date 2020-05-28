@@ -35,7 +35,7 @@
 	}
 
 	.checkbox {
-		@apply hidden !important;
+		@apply border border-solid border-gray-500 rounded-md hidden !important;
 	}
 
 	.line {

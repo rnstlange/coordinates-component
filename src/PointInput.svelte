@@ -14,12 +14,12 @@
 <div class="component">
 	<input type="text" class="input" bind:value {disabled} />
 	{#if value}
-		<button on:click={handleDelClick}>
+		<button class="button" on:click={handleDelClick}>
 			<FaTrash />
 		</button>
 	{/if}
 	{#if !disabled}
-		<button on:click={handleAddClick}>
+		<button class="button" on:click={handleAddClick}>
 			<FaPlus />
 		</button>
 	{/if}
@@ -39,10 +39,10 @@
 	}
 
 	.input {
-		@apply rounded-full px-2 flex-auto w-0 !important;
+		@apply border border-solid border-gray-500 rounded-full px-2 flex-auto w-0 !important;
 	}
 
-	button {
-		@apply px-1 h-6 w-6 !important;
+	.button {
+		@apply border border-solid border-gray-500 rounded-md px-1 h-6 w-6 flex !important;
 	}
 </style>

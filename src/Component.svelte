@@ -9,7 +9,6 @@
 		fromEPSG3857ToWGS84,
 		fromWGS84ToEPSG3857
 	} from './format'
-	import GlobalStyle from './GlobalStyle.svelte'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
 	import Textarea from './Textarea.svelte'
@@ -110,8 +109,6 @@
 	}
 </script>
 
-<GlobalStyle />
-
 <div class="component">
 
 	<!-- dms / dd -->
@@ -150,13 +147,15 @@
 
 	<!-- point coordinates -->
 
-	<div class="multiplerows">
-		{#each coordinates as coordinate, i}
-			<div>
-				<PointInput value={formatToString(changeProjection(coordinate), format)} disabled={true} on:del={handleDelCoordinate(i)} />
-			</div>
-		{/each}
-	</div>
+	{#if coordinates && coordinates.length && coordinates.length > 0}
+		<div class="multiplerows">
+			{#each coordinates as coordinate, i}
+				<div>
+					<PointInput value={formatToString(changeProjection(coordinate), format)} disabled={true} on:del={handleDelCoordinate(i)} />
+				</div>
+			{/each}
+		</div>
+	{/if}
 
 	<!-- cursor coordinates -->
 
@@ -195,9 +194,12 @@
 </div>
 
 <style lang="postcss">
+	@import 'tailwindcss/base';
+	@import 'tailwindcss/components';
+	@import 'tailwindcss/utilities';
 	.component {
 		@apply p-4 border border-black rounded-lg !important;
-		width: 300px !important;
+		width: 350px !important;
 
 		& > * {
 			@apply mb-4 !important;
