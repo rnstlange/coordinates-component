@@ -77,7 +77,7 @@ export const fromEPSG3857ToWGS84 = coordinates => proj('EPSG:3857', 'WGS84', coo
 export const fromEPSG3857ToMSK64 = coordinates => proj('EPSG:3857', 'MB:6331964', coordinates)
 
 export const fromWGS84ToEPSG3857 = coordinates => proj('WGS84', 'EPSG:3857', swap(coordinates))
-export const fromMSK64ToEPSG3857 = coordinates => proj('MB:6331964', 'EPSG:3857', coordinates)
+export const fromMSK64ToEPSG3857 = coordinates => proj('MB:6331964', 'EPSG:3857', swap(coordinates))
 
 export const fromMSK64ToWGS84 = coordinates => proj('MB:6331964', 'WGS84', coordinates)
 export const fromWGS84ToMSK64 = coordinates => proj('WGS84', 'MB:6331964', coordinates)
