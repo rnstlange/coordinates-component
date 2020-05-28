@@ -170,7 +170,7 @@
 	{#if bufferization}
 		<div class="row">
 			<div>Буферизация</div>
-			<input bind:value={buffer} class="input" on:change={onChange} type="number" min="0" step="any" />
+			<input bind:value={buffer} class="input" on:change={onChange} type="number" step="any" />
 			<select bind:value={bufferMetric} on:change={onChange}>
 				{#each bufferMetrics as metric}
 					<option value={metric.value}>{metric.text}</option>
