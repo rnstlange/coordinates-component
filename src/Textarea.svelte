@@ -20,22 +20,22 @@
 
 <style lang="postcss">
 	.component {
-		@apply flex flex-row items-end w-full;
+		@apply flex flex-row items-end w-full !important;
 
 		& > * {
-			@apply mr-1;
+			@apply mr-1 !important;
 
 			&:last-child {
-				@apply mr-0;
+				@apply mr-0 !important;
 			}
 		}
 	}
 
 	.input {
-		@apply rounded-md px-2 flex-auto h-10 w-full min-h-full;
+		@apply rounded-md px-2 flex-auto h-10 w-full min-h-full !important;
 	}
 
 	button {
-		@apply px-1 h-6 w-6;
+		@apply px-1 h-6 w-6 !important;
 	}
 </style>

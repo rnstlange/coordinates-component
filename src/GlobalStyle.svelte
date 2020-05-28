@@ -7,6 +7,6 @@
 	button,
 	select,
 	textarea {
-		@apply border border-solid border-gray-500 rounded-md;
+		@apply border border-solid border-gray-500 rounded-md !important;
 	}
 </style>
