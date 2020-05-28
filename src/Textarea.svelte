@@ -32,10 +32,10 @@
 	}
 
 	.input {
-		@apply border border-solid border-gray-500 rounded-md px-2 py-1 flex-auto min-h-12 w-full !important;
+		@apply border border-solid border-gray-500 rounded-md px-3 py-1 flex-auto min-h-16 w-full !important;
 	}
 
 	.button {
-		@apply border border-solid border-gray-500 rounded-md px-1 h-6 w-6 flex !important;
+		@apply border border-solid border-gray-500 rounded-md px-1 h-8 w-8 flex !important;
 	}
 </style>

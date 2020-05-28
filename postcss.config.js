@@ -15,7 +15,6 @@ module.exports = {
 		require('tailwindcss'),
 		require('precss'),
 		require('postcss-import'),
-		require('autoprefixer'),
-		...(production ? [purgecss, cssnano] : [])
+		...(production ? [purgecss, require('autoprefixer'), cssnano] : [])
 	]
 }

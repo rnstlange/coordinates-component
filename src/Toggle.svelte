@@ -28,7 +28,7 @@
 	}
 
 	.toggle {
-		@apply relative mx-2 !important;
+		@apply relative mx-3 !important;
 	}
 	.toggle.active .dot {
 		transform: translateX(100%) !important;
@@ -39,11 +39,11 @@
 	}
 
 	.line {
-		@apply block w-10 h-4 bg-gray-400 rounded-full shadow-inner !important;
+		@apply block w-16 h-6 bg-gray-400 rounded-full shadow-inner !important;
 	}
 
 	.dot {
-		@apply absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0 !important;
+		@apply absolute w-8 h-8 bg-white rounded-full shadow inset-y-0 left-0 !important;
 		top: -0.25rem !important;
 		left: -0.25rem !important;
 		transition: all 0.3s ease-in-out !important;

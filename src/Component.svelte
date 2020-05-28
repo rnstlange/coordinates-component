@@ -170,7 +170,7 @@
 	{#if bufferization}
 		<div class="row">
 			<div>Буферизация</div>
-			<input bind:value={buffer} on:change={onChange} type="number" min="0" step="any" style="flex: 1 1 auto; width: 0" />
+			<input bind:value={buffer} class="input" on:change={onChange} type="number" min="0" step="any" />
 			<select bind:value={bufferMetric} on:change={onChange}>
 				{#each bufferMetrics as metric}
 					<option value={metric.value}>{metric.text}</option>
@@ -198,11 +198,11 @@
 	@import 'tailwindcss/components';
 	@import 'tailwindcss/utilities';
 	.component {
-		@apply p-4 border border-black rounded-lg !important;
-		width: 22rem !important;
+		@apply p-6 border border-black rounded-lg text-2xl !important;
+		width: 35rem !important;
 
 		& > * {
-			@apply mb-4 !important;
+			@apply mb-6 !important;
 
 			&:last-child {
 				@apply mb-0 !important;
@@ -214,7 +214,7 @@
 		@apply flex flex-row justify-between !important;
 
 		& > * {
-			@apply mr-4 !important;
+			@apply mr-6 !important;
 			&:last-child {
 				@apply mr-0 !important;
 			}
@@ -230,5 +230,9 @@
 				@apply mb-0 !important;
 			}
 		}
+	}
+
+	.input {
+		@apply border border-solid border-gray-500 rounded-sm pl-3 flex-auto w-0 !important;
 	}
 </style>

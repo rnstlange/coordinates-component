@@ -39,10 +39,10 @@
 	}
 
 	.input {
-		@apply border border-solid border-gray-500 rounded-full px-2 flex-auto w-0 !important;
+		@apply border border-solid border-gray-500 rounded-full px-3 flex-auto w-0 !important;
 	}
 
 	.button {
-		@apply border border-solid border-gray-500 rounded-md px-1 h-6 w-6 flex !important;
+		@apply border border-solid border-gray-500 rounded-md px-1 h-8 w-8 flex !important;
 	}
 </style>

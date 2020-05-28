@@ -1,6 +1,8 @@
 const app = new CoordinatesComponent({
 	target: document.body,
 	props: {
-		multiple: true
+		multiple: true,
+		multitool: true,
+		bufferization: true
 	}
 })
