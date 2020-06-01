@@ -80,11 +80,12 @@
 	}
 
 	const handleAddMultipleCoordinate = () => {
-		coordinateTextarea.split('\n').map(el => {
-			if (testString(el)) {
-				coordinates = [changeProjection(parseString(el, 'dd'), false), ...coordinates]
-			}
-		})
+		const result = coordinateTextarea
+			.split('\n')
+			.map(el => (testString(el) ? changeProjection(parseString(el, 'dd'), false) : false))
+			.filter(el => !!el)
+
+		coordinates = [...coordinates, ...result]
 
 		coordinateTextarea = ''
 		onChange()
