@@ -1,5 +1,6 @@
 /node_modules/
-/build/bundle.*.map
+/build/bundle.*
+/build/style.*
 
 .DS_Store
 .vscode

@@ -5,6 +5,7 @@ import sveltePreprocess from 'svelte-preprocess'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
+import strip from '@rollup/plugin-strip'
 import { terser } from 'rollup-plugin-terser'
 
 const name = pkg.name
@@ -37,7 +38,9 @@ export default {
 			hydratable: true,
 			accessors: true,
 			preprocess: sveltePreprocess({ postcss: true }),
-			css: true
+			css(css) {
+				css.write('build/style.css')
+			}
 		}),
 		resolve({
 			browser: true,
@@ -46,9 +49,9 @@ export default {
 		commonjs(),
 
 		!production && serve(),
-
 		!production && livereload('build'),
 
+		production && strip(),
 		production && terser()
 	],
 	watch: {

@@ -1,15 +1,24 @@
 <script>
 	import { createEventDispatcher } from 'svelte'
-	import { testString, parseString, formatToString } from './format'
-	import GlobalStyle from './GlobalStyle.svelte'
+	import {
+		testString,
+		parseString,
+		formatToString,
+		fromEPSG3857ToMSK64,
+		fromMSK64ToEPSG3857,
+		fromEPSG3857ToWGS84,
+		fromWGS84ToEPSG3857
+	} from './format'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
+	import Textarea from './Textarea.svelte'
 	export let format = 'dms'
 	export let multiple = false
 	export let coordinate = false // Current point
 	export let coordinates = [] // Array of points
 	export let multitool = false
 	export let bufferization = false
+	export let projection = 'WGS84'
 
 	const dispatch = createEventDispatcher()
 
@@ -21,13 +30,30 @@
 	let bufferMetric = 1
 
 	let coordinateInput = ''
+	let coordinateTextarea = ''
 	let buffer = 0
 	let shape = 'polygon'
+
+	const projectionList = [
+		{ label: 'WGS84', value: 'WGS84' },
+		{ label: 'MSK', value: 'MSK' }
+	]
+
+	$: changeProjection = (coordinate, decode = true) => {
+		if (decode) {
+			if (projection == 'WGS84') return fromEPSG3857ToWGS84(coordinate)
+			if (projection == 'MSK') return fromEPSG3857ToMSK64(coordinate)
+		} else {
+			if (projection == 'WGS84') return fromWGS84ToEPSG3857(coordinate)
+			if (projection == 'MSK') return fromMSK64ToEPSG3857(coordinate)
+		}
+		return coordinate
+	}
 
 	const onChange = (force = false) => {
 		if (force || coordinates.length > 0)
 			dispatch('change', {
-				...(bufferization ? {buffer: buffer * bufferMetric} : {}),
+				...(bufferization ? { buffer: buffer * bufferMetric } : {}),
 				coordinates,
 				...(multitool && coordinates.length > 1 ? { shape: shape } : {})
 			})
@@ -39,8 +65,11 @@
 
 	const handleAddCoordinate = () => {
 		if (testString(coordinateInput)) {
-			if (!multiple) coordinates = [parseString(coordinateInput, 'dd')]
-			else coordinates = [parseString(coordinateInput, 'dd'), ...coordinates]
+			const coordinate = changeProjection(parseString(coordinateInput, 'dd'), false)
+			console.log(coordinate)
+
+			if (!multiple) coordinates = [coordinate]
+			else coordinates = [coordinate, ...coordinates]
 			coordinateInput = ''
 			onChange()
 		}
@@ -48,6 +77,20 @@
 
 	const handleDelInputCoordinate = () => {
 		coordinateInput = ''
+	}
+
+	const handleAddMultipleCoordinate = () => {
+		coordinateTextarea.split('\n').map(el => {
+			if (testString(el)) {
+				coordinates = [changeProjection(parseString(el, 'dd'), false), ...coordinates]
+			}
+		})
+
+		coordinateTextarea = ''
+		onChange()
+	}
+	const handleDeleteMultipleCoordinate = () => {
+		coordinateTextarea = ''
 	}
 
 	const handleDelCoordinate = idx => () => {
@@ -59,38 +102,75 @@
 		shape = v
 		onChange()
 	}
+
+	const handleProjectionChange = ({ detail: v }) => {
+		projection = v
+		onChange()
+	}
 </script>
 
-<GlobalStyle />
-
 <div class="component">
+
 	<!-- dms / dd -->
+
 	<div class="row">
-		<div>Координаты</div>
+		<div>Координаты:</div>
 		<Toggle left={{ text: 'DMS', value: 'dms' }} right={{ text: 'DD', value: 'dd' }} on:change={handleFormatChange} />
 	</div>
-	<!-- point coordinates -->
-	<div class="multiplerows">
-		<div>
-			<PointInput bind:value={coordinateInput} on:add={handleAddCoordinate} on:del={handleDelInputCoordinate} />
-		</div>
-		{#each coordinates as coordinate, i}
-			<div>
-				<PointInput value={formatToString(coordinate, format)} disabled={true} on:del={handleDelCoordinate(i)} />
-			</div>
-		{/each}
+
+	<!-- projection -->
+
+	<div class="row">
+		<div>Проекция:</div>
+		<Toggle
+			left={{ text: 'WGS84', value: 'WGS84' }}
+			right={{ text: 'МСК-64', value: 'MSK' }}
+			value={shape == 'WGS84'}
+			on:change={handleProjectionChange}
+		/>
 	</div>
-	<!-- cursor coordinates -->
-	{#if coordinate}
+
+	<!-- points input -->
+	{#if multiple}
 		<div class="row">
-			<div>{formatToString(coordinate, format)}</div>
+			<Textarea bind:value={coordinateTextarea} on:add={handleAddMultipleCoordinate} on:del={handleDeleteMultipleCoordinate} />
 		</div>
 	{/if}
+
+	<!-- point input -->
+
+	{#if !multiple}
+		<div class="row">
+			<PointInput bind:value={coordinateInput} on:add={handleAddCoordinate} on:del={handleDelInputCoordinate} />
+		</div>
+	{/if}
+
+	<!-- point coordinates -->
+
+	{#if coordinates && coordinates.length && coordinates.length > 0}
+		<div class="multiplerows">
+			{#each coordinates as coordinate, i}
+				<div>
+					<PointInput value={formatToString(changeProjection(coordinate), format)} disabled={true} on:del={handleDelCoordinate(i)} />
+				</div>
+			{/each}
+		</div>
+	{/if}
+
+	<!-- cursor coordinates -->
+
+	{#if coordinate}
+		<div class="row">
+			<div>{formatToString(changeProjection(coordinate), format)}</div>
+		</div>
+	{/if}
+
 	<!-- buferization -->
+
 	{#if bufferization}
 		<div class="row">
 			<div>Буферизация</div>
-			<input bind:value={buffer} on:change={onChange} type="number" min="0" step="any" style="flex: 1 1 auto; width: 0" />
+			<input bind:value={buffer} class="input" on:change={onChange} type="number" step="any" />
 			<select bind:value={bufferMetric} on:change={onChange}>
 				{#each bufferMetrics as metric}
 					<option value={metric.value}>{metric.text}</option>
@@ -98,7 +178,9 @@
 			</select>
 		</div>
 	{/if}
+
 	<!-- line / polygon -->
+
 	{#if coordinates.length > 1 && multitool}
 		<div class="row">
 			<Toggle
@@ -112,38 +194,45 @@
 </div>
 
 <style lang="postcss">
+	@import 'tailwindcss/base';
+	@import 'tailwindcss/components';
+	@import 'tailwindcss/utilities';
 	.component {
-		@apply p-4 border border-black rounded-lg;
-		width: 300px;
+		@apply p-6 border border-black rounded-lg text-2xl !important;
+		width: 35rem !important;
 
 		& > * {
-			@apply mb-4;
+			@apply mb-6 !important;
 
 			&:last-child {
-				@apply mb-0;
+				@apply mb-0 !important;
 			}
 		}
 	}
 
 	.row {
-		@apply flex flex-row justify-between;
+		@apply flex flex-row justify-between !important;
 
 		& > * {
-			@apply mr-4;
+			@apply mr-6 !important;
 			&:last-child {
-				@apply mr-0;
+				@apply mr-0 !important;
 			}
 		}
 	}
 
 	.multiplerows {
-		@apply flex flex-col;
+		@apply flex flex-col !important;
 
 		& > * {
-			@apply mb-1;
+			@apply mb-1 !important;
 			&:last-child {
-				@apply mb-0;
+				@apply mb-0 !important;
 			}
 		}
+	}
+
+	.input {
+		@apply border border-solid border-gray-500 rounded-sm pl-3 flex-auto w-0 !important;
 	}
 </style>
