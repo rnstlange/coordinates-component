@@ -50,6 +50,16 @@
 		return coordinate
 	}
 
+	const handleCoordinate = coordinate => {
+		if (testString(coordinate)) {
+			const result = changeProjection(parseString(coordinate, 'dd'), false)
+			if (Array.isArray(result) && result[0] && result[1]) {
+				return result
+			}
+		}
+		return false
+	}
+
 	const onChange = (force = false) => {
 		if (force || coordinates.length > 0)
 			dispatch('change', {
@@ -64,14 +74,21 @@
 	}
 
 	const handleAddCoordinate = () => {
-		if (testString(coordinateInput)) {
-			const coordinate = changeProjection(parseString(coordinateInput, 'dd'), false)
-			console.log(coordinate)
+		try {
+			if (testString(coordinateInput)) {
+				const coordinate = handleCoordinate(coordinateInput)
 
-			if (!multiple) coordinates = [coordinate]
-			else coordinates = [coordinate, ...coordinates]
+				if (coordinate) {
+					if (!multiple) coordinates = [coordinate]
+					else coordinates = [coordinate, ...coordinates]
+					onChange()
+				}
+				coordinateInput = ''
+			}
+		} catch (e) {
+			console.error(e)
+		} finally {
 			coordinateInput = ''
-			onChange()
 		}
 	}
 
@@ -80,15 +97,20 @@
 	}
 
 	const handleAddMultipleCoordinate = () => {
-		const result = coordinateTextarea
-			.split('\n')
-			.map(el => (testString(el) ? changeProjection(parseString(el, 'dd'), false) : false))
-			.filter(el => !!el)
+		try {
+			const result = coordinateTextarea
+				.split('\n')
+				.map(handleCoordinate)
+				.filter(el => !!el)
 
-		coordinates = [...coordinates, ...result]
-
-		coordinateTextarea = ''
-		onChange()
+			console.log(result)
+			coordinates = [...coordinates, ...result]
+			onChange()
+		} catch (e) {
+			console.error(e)
+		} finally {
+			coordinateTextarea = ''
+		}
 	}
 	const handleDeleteMultipleCoordinate = () => {
 		coordinateTextarea = ''
@@ -107,6 +129,15 @@
 	const handleProjectionChange = ({ detail: v }) => {
 		projection = v
 		onChange()
+	}
+
+	$: f = coordinate => {
+		try {
+			return formatToString(changeProjection(coordinate), format)
+		} catch (e) {
+			console.error(e)
+			return ''
+		}
 	}
 </script>
 
@@ -152,7 +183,7 @@
 		<div class="multiplerows">
 			{#each coordinates as coordinate, i}
 				<div>
-					<PointInput value={formatToString(changeProjection(coordinate), format)} disabled={true} on:del={handleDelCoordinate(i)} />
+					<PointInput value={f(coordinate)} disabled={true} on:del={handleDelCoordinate(i)} />
 				</div>
 			{/each}
 		</div>
@@ -162,7 +193,7 @@
 
 	{#if coordinate}
 		<div class="row">
-			<div>{formatToString(changeProjection(coordinate), format)}</div>
+			<div>{f(coordinate)}</div>
 		</div>
 	{/if}
 
