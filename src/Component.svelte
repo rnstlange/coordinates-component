@@ -11,7 +11,7 @@
 	} from './format'
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
-	import Textarea from './Textarea.svelte'
+	import PointsInput from './PointsInput.svelte'
 	export let format = 'dms'
 	export let multiple = false
 	export let coordinate = false // Current point
@@ -165,7 +165,7 @@
 	<!-- points input -->
 	{#if multiple}
 		<div class="row">
-			<Textarea bind:value={coordinateTextarea} on:add={handleAddMultipleCoordinate} on:del={handleDeleteMultipleCoordinate} />
+			<PointsInput bind:value={coordinateTextarea} on:add={handleAddMultipleCoordinate} on:del={handleDeleteMultipleCoordinate} />
 		</div>
 	{/if}
 
