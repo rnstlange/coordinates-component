@@ -201,6 +201,8 @@
 	.component {
 		@apply p-6 border border-black rounded-lg text-2xl !important;
 		width: 35rem !important;
+		max-height: 50rem !important;
+		overflow-y: auto !important;
 
 		& > * {
 			@apply mb-6 !important;
