@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import FaPlus from 'svelte-icons/fa/FaPlus.svelte'
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte'
+	import Button from './Button.svelte'
 	export let value = ''
 	export let disabled = false
 
@@ -15,14 +16,14 @@
 	<textarea class="input" bind:value {disabled} />
 	<div class="control">
 		{#if value}
-			<button class="button" on:click={handleDelClick}>
+			<Button on:click={handleDelClick}>
 				<FaTrash />
-			</button>
+			</Button>
 		{/if}
 		{#if !disabled}
-			<button class="button" on:click={handleAddClick}>
+			<Button on:click={handleAddClick}>
 				<FaPlus />
-			</button>
+			</Button>
 		{/if}
 	</div>
 </div>
@@ -51,9 +52,5 @@
 
 	.input {
 		@apply border border-solid border-gray-500 rounded-md px-3 py-1 flex-auto min-h-16 w-full !important;
-	}
-
-	.button {
-		@apply border border-solid border-gray-500 rounded-md px-1 h-8 w-8 flex !important;
 	}
 </style>

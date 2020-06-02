@@ -9,9 +9,13 @@
 		fromEPSG3857ToWGS84,
 		fromWGS84ToEPSG3857
 	} from './format'
+
+	import FaTrash from 'svelte-icons/fa/FaTrash.svelte'
+
 	import Toggle from './Toggle.svelte'
 	import PointInput from './PointInput.svelte'
 	import PointsInput from './PointsInput.svelte'
+	import Button from './Button.svelte'
 	export let format = 'dms'
 	export let multiple = false
 	export let coordinate = false // Current point
@@ -139,6 +143,11 @@
 			return ''
 		}
 	}
+
+	const handleDeleteAll = () => {
+		coordinates = []
+		onChange(true)
+	}
 </script>
 
 <div class="component">
@@ -174,6 +183,15 @@
 	{#if !multiple}
 		<div class="row">
 			<PointInput bind:value={coordinateInput} on:add={handleAddCoordinate} on:del={handleDelInputCoordinate} />
+		</div>
+	{/if}
+
+	{#if coordinates && coordinates.length && coordinates.length > 1}
+		<div class="row">
+			<div>Удалить все</div>
+			<Button on:click={handleDeleteAll}>
+				<FaTrash />
+			</Button>
 		</div>
 	{/if}
 
