@@ -13,22 +13,24 @@
 </script>
 
 <div class="component">
-	<input type="text" class="input" bind:value {disabled} />
-	{#if value}
-		<Button class="button" on:click={handleDelClick}>
-			<FaTrash />
-		</Button>
-	{/if}
-	{#if !disabled}
-		<Button class="button" on:click={handleAddClick}>
-			<FaPlus />
-		</Button>
-	{/if}
+	<textarea class="input" bind:value {disabled} />
+	<div class="control">
+		{#if value}
+			<Button on:click={handleDelClick}>
+				<FaTrash />
+			</Button>
+		{/if}
+		{#if !disabled}
+			<Button on:click={handleAddClick}>
+				<FaPlus />
+			</Button>
+		{/if}
+	</div>
 </div>
 
 <style lang="postcss">
 	.component {
-		@apply flex flex-row items-center w-full !important;
+		@apply flex flex-row items-end w-full !important;
 
 		& > * {
 			@apply mr-1 !important;
@@ -39,7 +41,16 @@
 		}
 	}
 
+	.control {
+		@apply flex flex-col justify-between h-full;
+		& > * {
+			&:last-child {
+				@apply mt-auto;
+			}
+		}
+	}
+
 	.input {
-		@apply border border-solid border-gray-500 rounded-full px-3 flex-auto w-0 !important;
+		@apply border border-solid border-gray-500 rounded-md px-3 py-1 flex-auto min-h-16 w-full !important;
 	}
 </style>
