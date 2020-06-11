@@ -1,6 +1,6 @@
 {
 	"name": "@rnstlange/coordinates-component",
-	"version": "1.3.2",
+	"version": "1.3.3",
 	"license": "Apache-2.0",
 	"module": "build/bundle.mjs",
 	"main": "build/bundle.js",
