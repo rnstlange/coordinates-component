@@ -23,6 +23,7 @@
 	export let multitool = false
 	export let bufferization = false
 	export let projection = 'WGS84'
+	export let buffer = 0
 
 	const dispatch = createEventDispatcher()
 
@@ -35,7 +36,7 @@
 
 	let coordinateInput = ''
 	let coordinateTextarea = ''
-	let buffer = 0
+
 	let shape = 'polygon'
 
 	const projectionList = [
