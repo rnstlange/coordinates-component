@@ -24,6 +24,7 @@
 	export let bufferization = false
 	export let projection = 'WGS84'
 	export let buffer = 0
+	export let bufferMetric = 1
 
 	const dispatch = createEventDispatcher()
 
@@ -31,8 +32,6 @@
 		{ text: 'м', value: 1 },
 		{ text: 'км', value: 1000 }
 	]
-
-	let bufferMetric = 1
 
 	let coordinateInput = ''
 	let coordinateTextarea = ''
@@ -68,7 +67,7 @@
 	const onChange = (force = false) => {
 		if (force || coordinates.length > 0)
 			dispatch('change', {
-				...(bufferization ? { buffer: buffer * bufferMetric } : {}),
+				...(bufferization ? { buffer: buffer, bufferMetric } : {}),
 				coordinates,
 				...(multitool && coordinates.length > 1 ? { shape: shape } : {})
 			})
