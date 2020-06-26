@@ -6,3 +6,5 @@ const app = new CoordinatesComponent({
 		bufferization: true
 	}
 })
+
+app.$on('change', e => console.log(e.detail))
